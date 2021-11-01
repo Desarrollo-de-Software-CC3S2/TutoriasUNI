@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createContext } from "react";
 import { useHistory } from "react-router-dom";
-import roles from "../helpers/roles";
+//import roles from "../helpers/roles";
 
 export const AuthContext = createContext();
 
@@ -9,7 +9,13 @@ export default function AuthProvider({ children }) {
   const history = useHistory();
   const [user, setUser] = useState(null);
   const login = (userCredentials, fromLocation) => {
-    setUser({ id: 1, role: roles.alumno });
+    setUser({
+      id: userCredentials.userId,
+      role: userCredentials.role,
+      nombre: userCredentials.nombre,
+      apellido: userCredentials.apellido,
+      cursos: userCredentials.cursos,
+    });
     if (fromLocation) {
       history.push(fromLocation);
     }
