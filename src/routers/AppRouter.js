@@ -22,7 +22,7 @@ export default function AppRouter() {
       <PrivateRoute
         hasRole={roles.admin}
         exact
-        path="/admin/users"
+        path={routes.admin.users}
         component={UsersPage}
       />
 
