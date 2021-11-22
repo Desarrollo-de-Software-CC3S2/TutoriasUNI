@@ -14,24 +14,38 @@ export default function LoginPage() {
       <Row className="mt-5">
         <Col md={{ span: 4, offset: 4 }}>
           <Form>
-            <Form.Label>Email address</Form.Label>
-            <Form.Control required type="email" placeholder="Enter email" />
-            <Form.Label>Contraseña</Form.Label>
-            <Form.Control required type="password" placeholder="Ingrese contraseña" />
-            <Button variant="primary" type="submit">
+            <Form.Group className="mb-2">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control required type="email" placeholder="Enter email" />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                required
+                type="password"
+                placeholder="Ingrese contraseña"
+              />
+            </Form.Group>
+            <Button
+              as={Col}
+              variant="primary"
+              md={{ span: 6, offset: 3 }}
+              xs={{ span: 6, offset: 3 }}
+              type="submit"
+            >
               Iniciar sesión
             </Button>
           </Form>
-          <button
+          <Button
             onClick={() => login(userCredentialsAl, location.state?.from)}
           >
             Iniciar sesión alumno
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => login(userCredentialsTu, location.state?.from)}
           >
             Iniciar sesión tutor
-          </button>
+          </Button>
         </Col>
       </Row>
     </Container>
