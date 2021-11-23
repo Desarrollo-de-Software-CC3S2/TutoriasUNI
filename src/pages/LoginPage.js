@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 import useAuth from "../auth/useAuth";
 import usersData from "../assets/data/Users";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import { Formik, Form as Formk, Field } from "formik";
+import LoginSchema from "../schemas/LoginSchema";
 
 const userCredentialsAl = usersData[0];
 const userCredentialsTu = usersData[1];
@@ -13,29 +15,57 @@ export default function LoginPage() {
     <Container>
       <Row className="mt-5">
         <Col md={{ span: 4, offset: 4 }}>
-          <Form>
-            <Form.Group className="mb-2">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control required type="email" placeholder="Enter email" />
-            </Form.Group>
-            <Form.Group className="mb-4">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                placeholder="Ingrese contraseña"
-              />
-            </Form.Group>
-            <Button
-              as={Col}
-              variant="primary"
-              md={{ span: 6, offset: 3 }}
-              xs={{ span: 6, offset: 3 }}
-              type="submit"
-            >
-              Iniciar sesión
-            </Button>
-          </Form>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={LoginSchema}
+            onSubmit={(values, { resetForm }) => {
+              resetForm();
+              console.log(values);
+            }}
+          >
+            {({ errors, touched }) => (
+              <Form as={Formk}>
+                <Form.Group className="mb-2">
+                  <Form.Label htmlFor="email">Correo</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="email"
+                    name="email"
+                    placeholder="Ingrese correo"
+                    isInvalid={!!errors.email && touched.email}
+                    isValid={!errors.email && touched.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-4">
+                  <Form.Label htmlFor="password">Contraseña</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="password"
+                    name="password"
+                    placeholder="Ingrese contraseña"
+                    isInvalid={!!errors.password && touched.password}
+                    isValid={!errors.password && touched.password}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Col md={{ offset: 4 }}>
+                    <Button variant="primary" type="submit">
+                      Iniciar sesión
+                    </Button>
+                  </Col>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
           <Button
             onClick={() => login(userCredentialsAl, location.state?.from)}
           >

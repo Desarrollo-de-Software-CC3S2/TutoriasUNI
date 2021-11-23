@@ -1,59 +1,111 @@
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import axios from "axios";
+import { Formik, Form as Formk, Field } from "formik";
+import RegisterSchema from "../schemas/RegisterSchema";
+//import axios from "axios";
 
 export default function RegisterPage() {
-  function handleClick() {
-    //axios.post("");
-    console.log("click");
-  }
-
   return (
     <Container>
       <Row className="mt-5">
         <Col md={{ span: 4, offset: 4 }}>
-          <Form>
-            <Form.Group className="mb-2">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control required type="text" placeholder="Ingrese Nombre" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Apellido</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Ingrese Apellido"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control required type="email" placeholder="Enter email" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                placeholder="Ingrese contraseña"
-              />
-            </Form.Group>
-            <Form.Group className="mb-4">
-              <Form.Label>Repita Contraseña</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                placeholder="Ingrese contraseña"
-              />
-            </Form.Group>
-            <Button
-              as={Col}
-              variant="primary"
-              md={{ span: 6, offset: 3 }}
-              xs={{ span: 6, offset: 3 }}
-              type="submit"
-            >
-              Registrarse
-            </Button>
-          </Form>
+          <Formik
+            initialValues={{
+              name: "",
+              lastname: "",
+              email: "",
+              password: "",
+              confirmpass: "",
+            }}
+            validationSchema={RegisterSchema}
+            onSubmit={(values, { restForm }) => {
+              restForm();
+              console.log(values);
+            }}
+          >
+            {({ errors, touched }) => (
+              <Form as={Formk}>
+                <Form.Group className="mb-2">
+                  <Form.Label htmlFor="name">Nombre</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="text"
+                    name="name"
+                    placeholder="Ingrese Nombre"
+                    isInvalid={!!errors.name && touched.name}
+                    isValid={!errors.name && touched.name}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label htmlFor="lastname">Apellido</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="text"
+                    name="lastname"
+                    placeholder="Ingrese Apellido"
+                    isInvalid={!!errors.lastname && touched.lastname}
+                    isValid={!errors.lastname && touched.lastname}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.lastname}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label htmlFor="email">Correo</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="email"
+                    name="email"
+                    placeholder="Enter email"
+                    isInvalid={!!errors.email && touched.email}
+                    isValid={!errors.email && touched.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label htmlFor="password">Contraseña</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="password"
+                    name="password"
+                    placeholder="Ingrese contraseña"
+                    isInvalid={!!errors.password && touched.password}
+                    isValid={!errors.password && touched.password}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-4">
+                  <Form.Label htmlFor="confirmpass">
+                    Confirme Contraseña
+                  </Form.Label>
+                  <Form.Control
+                    as={Field}
+                    type="password"
+                    name="confirmpass"
+                    placeholder="Repita contraseña"
+                    isInvalid={!!errors.confirmpass && touched.confirmpass}
+                    isValid={!errors.confirmpass && touched.confirmpass}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.confirmpass}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Col md={{ offset: 4 }}>
+                    <Button variant="primary" type="submit">
+                      Registrarse
+                    </Button>
+                  </Col>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
         </Col>
       </Row>
     </Container>
