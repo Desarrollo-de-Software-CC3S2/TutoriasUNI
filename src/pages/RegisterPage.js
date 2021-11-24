@@ -1,7 +1,7 @@
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { Formik, Form as Formk, Field } from "formik";
 import RegisterSchema from "../schemas/RegisterSchema";
-//import axios from "axios";
+import axios from "axios";
 
 export default function RegisterPage() {
   return (
@@ -17,9 +17,14 @@ export default function RegisterPage() {
               confirmpass: "",
             }}
             validationSchema={RegisterSchema}
-            onSubmit={(values, { restForm }) => {
-              restForm();
-              console.log(values);
+            onSubmit={(values, { resetForm }) => {
+              resetForm();
+              axios
+                .post(`http://localhost:8000/api/v1/auth/register`, values)
+                .then((res) => {
+                  console.log(res.data);
+                })
+                .catch((err) => console.log(err));
             }}
           >
             {({ errors, touched }) => (
