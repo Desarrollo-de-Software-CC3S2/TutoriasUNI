@@ -4,6 +4,7 @@ import usersData from "../assets/data/Users";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { Formik, Form as Formk, Field } from "formik";
 import LoginSchema from "../schemas/LoginSchema";
+import axios from "axios";
 
 const userCredentialsAl = usersData[0];
 const userCredentialsTu = usersData[1];
@@ -23,7 +24,15 @@ export default function LoginPage() {
             validationSchema={LoginSchema}
             onSubmit={(values, { resetForm }) => {
               resetForm();
-              console.log(values);
+              axios
+                .get(
+                  `http://localhost:8000/api/v1/auth/login/${values.email}&&${values.password}`
+                )
+                .then((res) => {
+                  console.log(res.data);
+                  login(res.data, location.state?.from)
+                })
+                .catch((err) => console.log(err));
             }}
           >
             {({ errors, touched }) => (

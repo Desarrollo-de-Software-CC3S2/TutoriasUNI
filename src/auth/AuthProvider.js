@@ -10,10 +10,10 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const login = (userCredentials, fromLocation) => {
     setUser({
-      id: userCredentials.userId,
-      role: userCredentials.role,
-      nombre: userCredentials.nombre,
-      apellido: userCredentials.apellido,
+      id: userCredentials._id,
+      role: userCredentials.rol,
+      name: userCredentials.name,
+      lastname: userCredentials.lastname,
       cursos: userCredentials.cursos,
     });
     if (fromLocation) {
