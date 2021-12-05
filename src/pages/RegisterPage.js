@@ -2,8 +2,11 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { Formik, Form as Formk, Field } from "formik";
 import RegisterSchema from "../schemas/RegisterSchema";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import routes from "../helpers/routes";
 
 export default function RegisterPage() {
+  const history = useHistory();
   return (
     <Container>
       <Row className="mt-5">
@@ -25,6 +28,7 @@ export default function RegisterPage() {
                   console.log(res.data);
                 })
                 .catch((err) => console.log(err));
+              history.push(routes.login)
             }}
           >
             {({ errors, touched }) => (
