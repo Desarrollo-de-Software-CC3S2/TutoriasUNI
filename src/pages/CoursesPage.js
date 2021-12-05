@@ -5,9 +5,12 @@ import useAuth from "../auth/useAuth";
 import { useState } from "react";
 import MessageItem from "../components/MessageItem";
 import roles from "../helpers/roles";
+import CourseSchema from "../schemas/CourseSchema";
+import axios from "axios";
+import { Formik, Form as Formk, Field } from "formik";
 
 export default function CoursesPage() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   let Courses = CourseData.filter((item) => user.cursos.includes(item.id));
 
   const [show, setShow] = useState(false);
@@ -123,43 +126,98 @@ export default function CoursesPage() {
             <Modal.Title>Crear curso</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group className="mb-2">
-                <Form.Label>Nombre de Curso</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Ingrese nombre de curso"
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label>Codigo de Curso</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Ingrese codigo de curso"
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group className="mb-4">
-                <Form.Label>Tema</Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option>Elija una opcion</option>
-                  <option value="Matematica">Matematica</option>
-                  <option value="Fisica">Fisica</option>
-                  <option value="Quimica">Quimica</option>
-                  <option value="Idiomas">Idiomas</option>
-                </Form.Select>
-              </Form.Group>
-              <Button
-                as={Col}
-                variant="primary"
-                md={{ span: 6, offset: 3 }}
-                xs={{ span: 6, offset: 3 }}
-                type="submit"
-              >
-                Crear
-              </Button>
-            </Form>
+            <Formik
+              initialValues={{
+                nombre: "",
+                codigo: "",
+                tema: "",
+              }}
+              validationSchema={CourseSchema}
+              onSubmit={(values, { resetForm }) => {
+                let valores = {
+                  nombre: values.nombre,
+                  tema: values.tema,
+                  profesorId: user?.id,
+                };
+                resetForm();
+                let cursos = user?.cursos;
+                axios
+                  .post(`http://localhost:8000/api/v1/courses/`, valores)
+                  .then((res) => {
+                    console.log(res.data);
+                    cursos.push(res.data._id);
+                    console.log(cursos);
+                    const newValores = {
+                      _id: user?.id,
+                      cursos: cursos,
+                    };
+                    axios
+                      .patch(
+                        `http://localhost:8000/api/v1/tutores/`,
+                        newValores
+                      )
+                      .then((res) => {
+                        console.log(res.data);
+                        setUser({ cursos: res.data.cursos });
+                      })
+                      .catch((err) => console.log(err));
+                  })
+                  .catch((err) => console.log(err));
+              }}
+            >
+              {({ errors, touched }) => (
+                <Form as={Formk}>
+                  <Form.Group className="mb-2">
+                    <Form.Label htmlFor="nombre">Nombre de Curso</Form.Label>
+                    <Form.Control
+                      as={Field}
+                      type="text"
+                      name="nombre"
+                      placeholder="Ingrese nombre de curso"
+                      isInvalid={!!errors.nombre && touched.nombre}
+                      isValid={!errors.nombre && touched.nombre}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.nombre}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group className="mb-2">
+                    <Form.Label htmlFor="codigo">Codigo de Curso</Form.Label>
+                    <Form.Control
+                      as={Field}
+                      type="text"
+                      name="codigo"
+                      placeholder="Ingrese codigo de curso"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.codigo}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label htmlForm="tema">Tema</Form.Label>
+                    <Field
+                      as={Form.Select}
+                      type="select"
+                      name="tema"
+                      isInvalid={!!errors.tema && touched.tema}
+                      isValid={!errors.tema && touched.tema}
+                    >
+                      <option>Elija una opción</option>
+                      <option value="Matematica">Matematica</option>
+                      <option value="Fisica">Fisica</option>
+                      <option value="Quimica">Quimica</option>
+                      <option value="Idiomas">Idiomas</option>
+                    </Field>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.tema}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Button variant="primary" type="submit">
+                    Crear
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </Modal.Body>
         </Modal>
       </Col>
