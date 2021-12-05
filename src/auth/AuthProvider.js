@@ -25,6 +25,7 @@ export default function AuthProvider({ children }) {
   const hasRole = (role) => user?.role === role;
   const contextValue = {
     user,
+    setUser,
     isLogged,
     hasRole,
     login,
