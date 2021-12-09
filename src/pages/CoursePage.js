@@ -1,16 +1,19 @@
+import axios from "axios";
 import { Container, Accordion } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import CourseData from "../assets/data/Cursos";
+import useAuth from "../auth/useAuth";
+//import CourseData from "../assets/data/Cursos";
 
 export default function CoursePage() {
   const { courseId } = useParams();
-  let CourseInfo = CourseData.filter((item) => item.id === Number(courseId));
-  console.log(CourseInfo[0].id);
+  const { course, setCourse } = useAuth();
+  //let CourseInfo = CourseData.filter((item) => item.id === Number(courseId));
+  //console.log(CourseInfo[0].id);
   const array = [0, 1, 2, 3, 4, 5, 6];
   return (
     <div style={{ display: "flex", margin: "2rem" }}>
       <Container>
-        <h1>{CourseInfo[0].name}</h1>
+        <h1>{course?.nombre}</h1>
         <Accordion defaultActiveKey="0" flush>
           {array.map((item) => (
             <Accordion.Item eventKey={String(item)}>
