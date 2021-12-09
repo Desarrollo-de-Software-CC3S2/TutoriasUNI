@@ -10,17 +10,7 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [course, setCourse] = useState(null);
   const login = (userCredentials, fromLocation) => {
-    setUser(
-      userCredentials
-      /* {
-      id: userCredentials._id,
-      role: userCredentials.rol,
-      name: userCredentials.name,
-      lastname: userCredentials.lastname,
-      cursos: userCredentials.cursos,
-      chat: [],
-    } */
-    );
+    setUser(userCredentials);
     if (fromLocation) {
       history.push(fromLocation);
     }
