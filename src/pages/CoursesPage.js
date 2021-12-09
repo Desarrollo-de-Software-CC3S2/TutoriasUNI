@@ -179,12 +179,11 @@ export default function CoursesPage() {
                     });
                     //console.log(cursos);
                     const newValores = {
-                      _id: user?._id,
                       cursos: cursos,
                     };
                     axios
                       .patch(
-                        `http://localhost:8000/api/v1/tutores/`,
+                        `http://localhost:8000/api/v1/tutores/${user._id}`,
                         newValores
                       )
                       .then((res) => {
@@ -212,7 +211,7 @@ export default function CoursesPage() {
                       {errors.nombre}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group className="mb-2">
+                  {/* <Form.Group className="mb-2">
                     <Form.Label htmlFor="codigo">Codigo de Curso</Form.Label>
                     <Form.Control
                       as={Field}
@@ -223,7 +222,7 @@ export default function CoursesPage() {
                     <Form.Control.Feedback type="invalid">
                       {errors.codigo}
                     </Form.Control.Feedback>
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group className="mb-4">
                     <Form.Label htmlForm="tema">Tema</Form.Label>
                     <Field
@@ -235,9 +234,11 @@ export default function CoursesPage() {
                     >
                       <option>Elija una opción</option>
                       <option value="Matematica">Matematica</option>
+                      <option value="Computacion">Computacion</option>
                       <option value="Fisica">Fisica</option>
                       <option value="Quimica">Quimica</option>
                       <option value="Idiomas">Idiomas</option>
+                      <option value="Letras">Letras</option>
                     </Field>
                     <Form.Control.Feedback type="invalid">
                       {errors.tema}
