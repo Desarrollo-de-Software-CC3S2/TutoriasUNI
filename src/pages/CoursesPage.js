@@ -193,6 +193,7 @@ export default function CoursesPage() {
                       .catch((err) => console.log(err));
                   })
                   .catch((err) => console.log(err));
+                setModalShow(false);
               }}
             >
               {({ errors, touched }) => (
