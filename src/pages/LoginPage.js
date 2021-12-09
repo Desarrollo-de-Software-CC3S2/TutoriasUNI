@@ -1,13 +1,13 @@
 import { useLocation } from "react-router-dom";
 import useAuth from "../auth/useAuth";
-import usersData from "../assets/data/Users";
+//import usersData from "../assets/data/Users";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { Formik, Form as Formk, Field } from "formik";
 import LoginSchema from "../schemas/LoginSchema";
 import axios from "axios";
 
-const userCredentialsAl = usersData[0];
-const userCredentialsTu = usersData[1];
+/* const userCredentialsAl = usersData[0];
+const userCredentialsTu = usersData[1]; */
 
 export default function LoginPage() {
   const location = useLocation();
@@ -29,7 +29,7 @@ export default function LoginPage() {
                   `http://localhost:8000/api/v1/auth/login/${values.email}&&${values.password}`
                 )
                 .then((res) => {
-                  console.log(res.data);
+                  //console.log(res.data);
                   login(res.data, location.state?.from)
                 })
                 .catch((err) => console.log(err));
@@ -75,7 +75,7 @@ export default function LoginPage() {
               </Form>
             )}
           </Formik>
-          <Button
+          {/* <Button
             onClick={() => login(userCredentialsAl, location.state?.from)}
           >
             Iniciar sesión alumno
@@ -84,7 +84,7 @@ export default function LoginPage() {
             onClick={() => login(userCredentialsTu, location.state?.from)}
           >
             Iniciar sesión tutor
-          </Button>
+          </Button> */}
         </Col>
       </Row>
     </Container>
