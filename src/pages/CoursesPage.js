@@ -1,5 +1,5 @@
 import CourseItem from "../components/CourseItem";
-import CourseData from "../assets/data/Cursos";
+//import CourseData from "../assets/data/Cursos";
 import { Col, Row, Button, Form, Offcanvas, Modal } from "react-bootstrap";
 import useAuth from "../auth/useAuth";
 import { useState } from "react";
@@ -11,7 +11,8 @@ import { Formik, Form as Formk, Field } from "formik";
 
 export default function CoursesPage() {
   const { user, setUser } = useAuth();
-  let Courses = CourseData.filter((item) => user.cursos.includes(item.id));
+  //let Courses = CourseData.filter((item) => user.cursos.includes(item.id));
+  let Courses = user?.cursos;
 
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -47,33 +48,58 @@ export default function CoursesPage() {
         <Row xs={1} md={2} lg={4} className="g-4">
           {Courses.map((item) => (
             <CourseItem
-              key={item.id}
-              courseId={item.id}
-              title={item.name}
+              key={item.id_curso}
+              courseId={item.id_curso}
+              title={item.nombre}
               tema={item.tema}
-              tutor={item.tutor}
-              colorCurso={item.color}
+              tutor={item.nombre_tutor}
+              codigo={item.codigo}
             />
           ))}
         </Row>
-        <Form
-          as={Row}
-          className="mt-5"
-          style={{ display: user?.role === roles.alumno ? "" : "none" }}
+        <Formik
+          initialValues={{
+            codigo: "",
+          }}
+          onSubmit={(values, { resetForm }) => {
+            resetForm();
+            axios
+              .patch(
+                `http://localhost:8000/api/v1/alumnos/${user._id}/courses/${values.codigo}`
+              )
+              .then((res) => {
+                //console.log(res.data);
+                setUser(res.data);
+              })
+              .catch((err) => console.log(err));
+          }}
         >
-          <Col md={{ span: 1 }}>
-            <Button type="submit">Añadir</Button>
-          </Col>
-          <Col xs={{ span: 4 }} md={{ span: 2 }}>
-            <Form.Control type="text" placeholder="Ingrese codígo" />
-          </Col>
-        </Form>
+          {() => (
+            <Formk
+              as={Row}
+              className="mt-5"
+              style={{ display: user?.rol === roles.alumno ? "" : "none" }}
+            >
+              <Col md={{ span: 1 }}>
+                <Button type="submit">Añadir</Button>
+              </Col>
+              <Col xs={{ span: 4 }} md={{ span: 2 }}>
+                <Form.Control
+                  as={Field}
+                  name="codigo"
+                  type="text"
+                  placeholder="Ingrese codígo"
+                />
+              </Col>
+            </Formk>
+          )}
+        </Formik>
       </Col>
       <Col className="m-3">
         <Button
           variant="primary"
           onClick={handleShow}
-          style={{ display: user?.role === roles.alumno ? "" : "none" }}
+          style={{ display: user?.rol === roles.alumno ? "" : "none" }}
         >
           ChatBot
         </Button>
@@ -116,7 +142,7 @@ export default function CoursesPage() {
         <Button
           variant="primary"
           onClick={() => setModalShow(true)}
-          style={{ display: user?.role === roles.tutor ? "" : "none" }}
+          style={{ display: user?.rol === roles.tutor ? "" : "none" }}
         >
           Crear curso
         </Button>
@@ -129,7 +155,6 @@ export default function CoursesPage() {
             <Formik
               initialValues={{
                 nombre: "",
-                codigo: "",
                 tema: "",
               }}
               validationSchema={CourseSchema}
@@ -137,18 +162,24 @@ export default function CoursesPage() {
                 let valores = {
                   nombre: values.nombre,
                   tema: values.tema,
-                  profesorId: user?.id,
+                  profesorId: user?._id,
                 };
                 resetForm();
                 let cursos = user?.cursos;
                 axios
                   .post(`http://localhost:8000/api/v1/courses/`, valores)
                   .then((res) => {
-                    console.log(res.data);
-                    cursos.push(res.data._id);
-                    console.log(cursos);
+                    //console.log(res.data);
+                    //setUser({ cursos: })
+                    cursos.push({
+                      id_curso: res.data._id,
+                      nombre: res.data.nombre,
+                      codigo: res.data.codigo,
+                      tema: res.data.tema,
+                    });
+                    //console.log(cursos);
                     const newValores = {
-                      _id: user?.id,
+                      _id: user?._id,
                       cursos: cursos,
                     };
                     axios
@@ -157,8 +188,8 @@ export default function CoursesPage() {
                         newValores
                       )
                       .then((res) => {
-                        console.log(res.data);
-                        setUser({ cursos: res.data.cursos });
+                        //console.log(res.data);
+                        setUser(res.data);
                       })
                       .catch((err) => console.log(err));
                   })
