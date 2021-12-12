@@ -47,7 +47,6 @@ export default function CourseItem(props) {
                         if (curso.id_curso === res.data._id) return false;
                         return true;
                       });
-                      console.log(cursos);
                       axios
                         .patch(
                           `http://localhost:8000/api/v1/tutores/${user._id}`,
@@ -55,6 +54,32 @@ export default function CourseItem(props) {
                         )
                         .then((res) => {
                           setUser(res.data);
+                        })
+                        .catch((err) => console.log(err));
+                      axios
+                        .get("http://localhost:8000/api/v1/alumnos/")
+                        .then((res) => {
+                          for (let alumno of res.data) {
+                            let cursos_alumno = alumno.cursos;
+                            for (let curso of cursos_alumno) {
+                              if (curso.id_curso === props.courseId) {
+                                cursos_alumno = cursos_alumno.filter(
+                                  (curso) => {
+                                    if (curso.id_curso === props.courseId)
+                                      return false;
+                                    return true;
+                                  }
+                                );
+                                axios
+                                  .patch(
+                                    `http://localhost:8000/api/v1/alumnos/${alumno._id}`,
+                                    { cursos: cursos_alumno }
+                                  )
+                                  .catch((err) => console.log(err));
+                                break;
+                              }
+                            }
+                          }
                         })
                         .catch((err) => console.log(err));
                     })
@@ -92,9 +117,23 @@ export default function CourseItem(props) {
                   .get(`http://localhost:8000/api/v1/courses/${props.courseId}`)
                   .then((res) => {
                     setCourse(res.data);
-                    //console.log(res.data);
                   })
                   .catch((err) => console.log(err));
+                if (user?.rol === roles.alumno) {
+                  axios
+                    .get(`http://localhost:8000/api/v1/alumnos/${user?._id}`)
+                    .then((res) => {
+                      setUser(res.data);
+                    })
+                    .catch((err) => console.log(err));
+                } else {
+                  axios
+                    .get(`http://localhost:8000/api/v1/tutores/${user?._id}`)
+                    .then((res) => {
+                      setUser(res.data);
+                    })
+                    .catch((err) => console.log(err));
+                }
                 history.push(routes.course(props.courseId));
               }}
             >
@@ -122,6 +161,7 @@ export default function CourseItem(props) {
             validationSchema={CourseSchema}
             onSubmit={(values, { resetForm }) => {
               resetForm();
+              var codigo = "";
               axios
                 .patch(
                   `http://localhost:8000/api/v1/courses/${props.courseId}`,
@@ -139,12 +179,43 @@ export default function CourseItem(props) {
                     codigo: res.data.codigo,
                     tema: res.data.tema,
                   });
+                  codigo = res.data.codigo;
                   axios
                     .patch(`http://localhost:8000/api/v1/tutores/${user._id}`, {
                       cursos: cursos,
                     })
                     .then((res) => {
                       setUser(res.data);
+                    })
+                    .catch((err) => console.log(err));
+                  axios
+                    .get("http://localhost:8000/api/v1/alumnos/")
+                    .then((res) => {
+                      for (let alumno of res.data) {
+                        let cursos_alumno = alumno.cursos;
+                        for (let curso of cursos_alumno) {
+                          if (curso.id_curso === props.courseId) {
+                            cursos_alumno = cursos_alumno.filter((curso) => {
+                              if (curso.id_curso === props.courseId)
+                                return false;
+                              return true;
+                            });
+                            cursos_alumno.push({
+                              id_curso: props.courseId,
+                              nombre: values.nombre,
+                              codigo: codigo,
+                              tema: values.tema,
+                            });
+                            axios
+                              .patch(
+                                `http://localhost:8000/api/v1/alumnos/${alumno._id}`,
+                                { cursos: cursos_alumno }
+                              )
+                              .catch((err) => console.log(err));
+                            break;
+                          }
+                        }
+                      }
                     })
                     .catch((err) => console.log(err));
                 })
