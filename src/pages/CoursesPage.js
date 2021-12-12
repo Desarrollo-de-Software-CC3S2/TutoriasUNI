@@ -212,18 +212,6 @@ export default function CoursesPage() {
                       {errors.nombre}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  {/* <Form.Group className="mb-2">
-                    <Form.Label htmlFor="codigo">Codigo de Curso</Form.Label>
-                    <Form.Control
-                      as={Field}
-                      type="text"
-                      name="codigo"
-                      placeholder="Ingrese codigo de curso"
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.codigo}
-                    </Form.Control.Feedback>
-                  </Form.Group> */}
                   <Form.Group className="mb-4">
                     <Form.Label htmlForm="tema">Tema</Form.Label>
                     <Field
