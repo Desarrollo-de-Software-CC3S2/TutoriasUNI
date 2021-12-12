@@ -12,7 +12,6 @@ import { Formik, Form as Formk, Field } from "formik";
 export default function CoursesPage() {
   const { user, setUser } = useAuth();
   //let Courses = CourseData.filter((item) => user.cursos.includes(item.id));
-  let Courses = user?.cursos;
 
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -46,7 +45,7 @@ export default function CoursesPage() {
     <div style={{ display: "flex", margin: "2rem" }}>
       <Col md={{ span: 9 }}>
         <Row xs={1} md={2} lg={4} className="g-4">
-          {Courses.map((item) => (
+          {user?.cursos.map((item) => (
             <CourseItem
               key={item.id_curso}
               courseId={item.id_curso}
