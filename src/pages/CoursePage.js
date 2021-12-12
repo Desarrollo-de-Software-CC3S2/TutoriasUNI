@@ -2,11 +2,12 @@ import axios from "axios";
 import { Container, Accordion, Button, Modal, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import useAuth from "../auth/useAuth";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 import { Formik, Form as Formk, Field } from "formik";
 import { useState } from "react";
 import roles from "../helpers/roles";
 import DocumentSchema from "../schemas/DocumentSchema";
+import FileViewer from "react-file-viewer";
 //import CourseData from "../assets/data/Cursos";
 
 export default function CoursePage() {
@@ -25,7 +26,7 @@ export default function CoursePage() {
           onClick={() => setModalShow(true)}
           style={{ display: user?.rol === roles.tutor ? "" : "none" }}
         >
-          Subir video
+          Subir Material
         </Button>
         <Accordion defaultActiveKey="0" flush>
           {course?.contenido.map((item) => (
@@ -35,7 +36,7 @@ export default function CoursePage() {
                 {item.tipo === "video" ? (
                   <ReactPlayer controls url={item.link} />
                 ) : (
-                  ""
+                  <FileViewer fileType="pdf" filePath={item.link}/>
                 )}
               </Accordion.Body>
             </Accordion.Item>
@@ -50,6 +51,7 @@ export default function CoursePage() {
               initialValues={{
                 tipo: "",
                 link: "",
+                nombre: "",
               }}
               validationSchema={DocumentSchema}
               onSubmit={(values, { resetForm }) => {
@@ -59,6 +61,7 @@ export default function CoursePage() {
                   link: values.link,
                   nombre: values.nombre,
                 };
+                console.log(contenido);
                 contenido.push(valores);
                 resetForm();
                 axios
@@ -111,7 +114,7 @@ export default function CoursePage() {
                       as={Field}
                       type="text"
                       name="link"
-                      placeholder="Ingrese enlace del video"
+                      placeholder="Ingrese enlace del material"
                       isInvalid={!!errors.link && touched.link}
                       isValid={!errors.link && touched.link}
                     />
