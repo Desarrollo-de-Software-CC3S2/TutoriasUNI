@@ -39,7 +39,7 @@ export default function CourseItem(props) {
                 onSubmit={() => {
                   axios
                     .delete(
-                      `http://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`
+                      `https://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`
                     )
                     .then((res) => {
                       var cursos = user?.cursos;
@@ -49,7 +49,7 @@ export default function CourseItem(props) {
                       });
                       axios
                         .patch(
-                          `http://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`,
+                          `https://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`,
                           { cursos: cursos }
                         )
                         .then((res) => {
@@ -57,7 +57,7 @@ export default function CourseItem(props) {
                         })
                         .catch((err) => console.log(err));
                       axios
-                        .get("http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/")
+                        .get("https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/")
                         .then((res) => {
                           for (let alumno of res.data) {
                             let cursos_alumno = alumno.cursos;
@@ -72,7 +72,7 @@ export default function CourseItem(props) {
                                 );
                                 axios
                                   .patch(
-                                    `http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${alumno._id}`,
+                                    `https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${alumno._id}`,
                                     { cursos: cursos_alumno }
                                   )
                                   .catch((err) => console.log(err));
@@ -114,7 +114,7 @@ export default function CourseItem(props) {
               initialValues={{}}
               onSubmit={() => {
                 axios
-                  .get(`http://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`)
+                  .get(`https://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`)
                   .then((res) => {
                     setCourse(res.data);
                   })
@@ -149,7 +149,7 @@ export default function CourseItem(props) {
               var codigo = "";
               axios
                 .patch(
-                  `http://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`,
+                  `https://tutoriasuni-api.herokuapp.com/api/v1/courses/${props.courseId}`,
                   values
                 )
                 .then((res) => {
@@ -166,7 +166,7 @@ export default function CourseItem(props) {
                   });
                   codigo = res.data.codigo;
                   axios
-                    .patch(`http://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`, {
+                    .patch(`https://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`, {
                       cursos: cursos,
                     })
                     .then((res) => {
@@ -174,7 +174,7 @@ export default function CourseItem(props) {
                     })
                     .catch((err) => console.log(err));
                   axios
-                    .get("http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/")
+                    .get("https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/")
                     .then((res) => {
                       for (let alumno of res.data) {
                         let cursos_alumno = alumno.cursos;
@@ -193,7 +193,7 @@ export default function CourseItem(props) {
                             });
                             axios
                               .patch(
-                                `http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${alumno._id}`,
+                                `https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${alumno._id}`,
                                 { cursos: cursos_alumno }
                               )
                               .catch((err) => console.log(err));

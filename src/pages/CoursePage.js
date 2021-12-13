@@ -65,7 +65,7 @@ export default function CoursePage() {
                 contenido.push(valores);
                 resetForm();
                 axios
-                  .patch(`http://tutoriasuni-api.herokuapp.com/api/v1/courses/${courseId}`, {
+                  .patch(`https://tutoriasuni-api.herokuapp.com/api/v1/courses/${courseId}`, {
                     contenido: contenido,
                   })
                   .then((res) => {

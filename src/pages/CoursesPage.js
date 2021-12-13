@@ -19,7 +19,7 @@ export default function CoursesPage() {
   const handleClose = () => {
     setShow(false);
     axios
-      .patch(`http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`, {
+      .patch(`https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`, {
         chatbot: [],
       })
       .then((res) => {
@@ -51,7 +51,7 @@ export default function CoursesPage() {
             resetForm();
             axios
               .patch(
-                `http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}/courses/${values.codigo}`
+                `https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}/courses/${values.codigo}`
               )
               .then((res) => {
                 //console.log(res.data);
@@ -124,7 +124,7 @@ export default function CoursesPage() {
                 });
                 //console.log(chatbot);
                 axios
-                  .patch(`http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`, {
+                  .patch(`https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`, {
                     chatbot: chatbot,
                   })
                   .then((res) => {
@@ -132,7 +132,7 @@ export default function CoursesPage() {
                     console.log(res.data);
                     var chatbot2 = user?.chatbot;
                     axios
-                      .post(`http://tutoriasuni-api.herokuapp.com/api/v1/bot`, valores)
+                      .post(`https://tutoriasuni-api.herokuapp.com/api/v1/bot`, valores)
                       .then((res) => {
                         chatbot2.push({
                           id_bot: "1",
@@ -141,7 +141,7 @@ export default function CoursesPage() {
                         });
                         axios
                           .patch(
-                            `http://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`,
+                            `https://tutoriasuni-api.herokuapp.com/api/v1/alumnos/${user._id}`,
                             {
                               chatbot: chatbot2,
                             }
@@ -208,7 +208,7 @@ export default function CoursesPage() {
                 resetForm();
                 let cursos = user?.cursos;
                 axios
-                  .post(`http://tutoriasuni-api.herokuapp.com/api/v1/courses/`, valores)
+                  .post(`https://tutoriasuni-api.herokuapp.com/api/v1/courses/`, valores)
                   .then((res) => {
                     //console.log(res.data);
                     //setUser({ cursos: })
@@ -224,7 +224,7 @@ export default function CoursesPage() {
                     };
                     axios
                       .patch(
-                        `http://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`,
+                        `https://tutoriasuni-api.herokuapp.com/api/v1/tutores/${user._id}`,
                         newValores
                       )
                       .then((res) => {

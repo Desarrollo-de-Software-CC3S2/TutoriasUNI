@@ -26,7 +26,7 @@ export default function LoginPage() {
               resetForm();
               axios
                 .get(
-                  `http://tutoriasuni-api.herokuapp.com/api/v1/auth/login/${values.email}&&${values.password}`
+                  `https://tutoriasuni-api.herokuapp.com/api/v1/auth/login/${values.email}&&${values.password}`
                 )
                 .then((res) => {
                   //console.log(res.data);
