@@ -32,7 +32,7 @@ export default function CoursesPage() {
     <div style={{ display: "flex", margin: "2rem" }}>
       <Col md={{ span: 9 }}>
         <Row xs={1} md={2} lg={4} className="g-4">
-          {user?.cursos.map((item) => (
+          {user?.cursos?.map((item) => (
             <CourseItem
               key={item.id_curso}
               courseId={item.id_curso}
