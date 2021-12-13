@@ -16,31 +16,18 @@ export default function CoursesPage() {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    axios
+      .patch(`http://localhost:8000/api/v1/alumnos/${user._id}`, {
+        chatbot: [],
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
   const handleShow = () => setShow(true);
-
-  let Messages = [
-    {
-      isBot: true,
-      text: "Hola bienvenido!!",
-    },
-    {
-      isBot: false,
-      text: "Quiero ver los cursos de matematica",
-    },
-    {
-      isBot: true,
-      text: "Curso1, Curso2, Curso3",
-    },
-    {
-      isBot: false,
-      text: "Quiero ver mis cuestionarios pendientes",
-    },
-    {
-      isBot: true,
-      text: "....",
-    },
-  ];
   return (
     <div style={{ display: "flex", margin: "2rem" }}>
       <Col md={{ span: 9 }}>
@@ -115,26 +102,81 @@ export default function CoursesPage() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <div style={{ overflowY: "scroll", height: "90%" }}>
-              {Messages.map((item) => (
+              {user?.chatbot?.map((item) => (
                 <MessageItem message={item} />
               ))}
             </div>
-            <Form>
-              <Row>
-                <Form.Group as={Col} xs={8} md={8}>
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Ingrese un mensaje"
-                    style={{ width: "100%" }}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} xs={4} md={4}>
-                  <Button variant="primary" type="submit">
-                    Enviar
-                  </Button>
-                </Form.Group>
-              </Row>
-            </Form>
+            <Formik
+              initialValues={{
+                cadena: "",
+              }}
+              onSubmit={(values, { resetForm }) => {
+                resetForm();
+                let valores = {
+                  cadena: values.cadena,
+                  userID: user?._id,
+                };
+                var chatbot = user?.chatbot;
+                chatbot.push({
+                  id_bot: "1",
+                  text: values.cadena,
+                  isBot: false,
+                });
+                //console.log(chatbot);
+                axios
+                  .patch(`http://localhost:8000/api/v1/alumnos/${user._id}`, {
+                    chatbot: chatbot,
+                  })
+                  .then((res) => {
+                    setUser(res.data);
+                    console.log(res.data);
+                    var chatbot2 = user?.chatbot;
+                    axios
+                      .post(`http://localhost:8000/api/v1/bot`, valores)
+                      .then((res) => {
+                        chatbot2.push({
+                          id_bot: "1",
+                          text: res.data.msg,
+                          isBot: true,
+                        });
+                        axios
+                          .patch(
+                            `http://localhost:8000/api/v1/alumnos/${user._id}`,
+                            {
+                              chatbot: chatbot2,
+                            }
+                          )
+                          .then((res) => {
+                            setUser(res.data);
+                          })
+                          .catch((err) => console.log(err));
+                      })
+                      .catch((err) => console.log(err));
+                  })
+                  .catch((err) => console.log(err));
+              }}
+            >
+              {() => (
+                <Form as={Formk}>
+                  <Row>
+                    <Form.Group as={Col} xs={8} md={8}>
+                      <Form.Control
+                        as={Field}
+                        type="textarea"
+                        name="cadena"
+                        placeholder="Ingrese un mensaje"
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Group>
+                    <Form.Group as={Col} xs={4} md={4}>
+                      <Button variant="primary" type="submit">
+                        Enviar
+                      </Button>
+                    </Form.Group>
+                  </Row>
+                </Form>
+              )}
+            </Formik>
           </Offcanvas.Body>
         </Offcanvas>
 
