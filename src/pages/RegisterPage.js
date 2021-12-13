@@ -23,7 +23,7 @@ export default function RegisterPage() {
             onSubmit={(values, { resetForm }) => {
               resetForm();
               axios
-                .post(`http://localhost:8000/api/v1/auth/register`, values)
+                .post(`http://tutoriasuni-api.herokuapp.com/api/v1/auth/register`, values)
                 .then((res) => {
                   console.log(res.data);
                 })
