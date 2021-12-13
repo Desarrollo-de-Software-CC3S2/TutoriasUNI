@@ -75,16 +75,6 @@ export default function LoginPage() {
               </Form>
             )}
           </Formik>
-          {/* <Button
-            onClick={() => login(userCredentialsAl, location.state?.from)}
-          >
-            Iniciar sesión alumno
-          </Button>
-          <Button
-            onClick={() => login(userCredentialsTu, location.state?.from)}
-          >
-            Iniciar sesión tutor
-          </Button> */}
         </Col>
       </Row>
     </Container>
