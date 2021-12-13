@@ -119,21 +119,6 @@ export default function CourseItem(props) {
                     setCourse(res.data);
                   })
                   .catch((err) => console.log(err));
-                if (user?.rol === roles.alumno) {
-                  axios
-                    .get(`http://localhost:8000/api/v1/alumnos/${user?._id}`)
-                    .then((res) => {
-                      setUser(res.data);
-                    })
-                    .catch((err) => console.log(err));
-                } else {
-                  axios
-                    .get(`http://localhost:8000/api/v1/tutores/${user?._id}`)
-                    .then((res) => {
-                      setUser(res.data);
-                    })
-                    .catch((err) => console.log(err));
-                }
                 history.push(routes.course(props.courseId));
               }}
             >
